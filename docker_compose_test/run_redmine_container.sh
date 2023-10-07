@@ -67,11 +67,35 @@ GO
 
 ### $ docker run -d --name some-redmine --network some-network -e REDMINE_DB_POSTGRES=some-postgres -e REDMINE_DB_USERNAME=redmine -e REDMINE_DB_PASSWORD=secret redmine
 
-docker run -itd --restart=unless-stopped --name redmine -p 3000:3000 --memory="128M" --memory-swap="128M" 
--e REDMINE_DB_POSTGRES=postgresSQL
--e REDMINE_DB_USERNAME=redmine 
--e REDMINE_DB_PASSWORD=secret
--v /mnt/REDMINE:/usr/src/redmine/files
---user redmine:redmine 
---link postgresSQL:postgres redmine
+#   --mount type=bind,target=/mnt/session_data,source=/data
+
+cls && docker volume rm REDMINE_FILES 
+
+docker volume create REDMINE_FILES
+
+
+docker run -itd \
+--restart=unless-stopped \
+--name redmine \
+--hostname redmine \
+--link postgresSQL \
+-p 3000:3000 \
+--memory="128M" \
+--memory-swap="128M" \
+--cpus 0.5 \
+--cpu-quota 60000 \
+-e REDMINE_DB_POSTGRES=postgresSQL \
+-e REDMINE_DB_USERNAME=redmine \
+-e REDMINE_DB_PASSWORD=D1etP33H0le \
+-v REDMINE_FILES:/usr/src/redmine/files \
+--user redmine:redmine \
+--link postgresSQL:postgres redmine \
 redmine:latest
+
+
+--add-host list postgresSQL:192.168.2.222
+# --network 
+# --ip 192.168.2.232
+# --link-local-ip
+# --mount /MNT/REDMINE_FILES /usr/src/redmine/files
+type=bind,target=/MNT/REDMINE_FILES,source=/usr/src/redmine/files
