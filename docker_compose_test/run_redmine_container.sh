@@ -69,32 +69,54 @@ GO
 
 #   --mount type=bind,target=/mnt/session_data,source=/data
 
-cls && docker volume rm REDMINE_FILES 
 
+clear
+echo ""
+echo "stop and remove redmine"
+echo "-----------------------------------------------------------"
+docker container stop redmine
+docker container rm redmine
+echo ""
+echo "remove volumes for redmine"
+echo "-----------------------------------------------------------"
+docker volume rm REDMINE_FILES 
+docker volume rm REDMINE_ROOT
+docker volume rm REDMINE_USR
+docker volume rm REDMINE_HOME
+echo ""
+echo "create volumes for redmine"
+echo "-----------------------------------------------------------"
 docker volume create REDMINE_FILES
+docker volume create REDMINE_ROOT
+docker volume create REDMINE_USR
+docker volume create REDMINE_HOME
+
 
 
 docker run -itd \
 --restart=unless-stopped \
 --name redmine \
 --hostname redmine \
---link postgresSQL \
+--link postgresSQL:REDMINE_DB \
 -p 3000:3000 \
 --memory="128M" \
 --memory-swap="128M" \
---cpus 0.5 \
---cpu-quota 60000 \
+--cpu-quota 40000 \
 -e REDMINE_DB_POSTGRES=postgresSQL \
 -e REDMINE_DB_USERNAME=redmine \
--e REDMINE_DB_PASSWORD=D1etP33H0le \
+-e REDMINE_DB_PASSWORD=R13dM1ne \
 -v REDMINE_FILES:/usr/src/redmine/files \
+-v REDMINE_USR:/usr \
+-v REDMINE_HOME:/home/redmine \
 --user redmine:redmine \
---link postgresSQL:postgres redmine \
 redmine:latest
 
 
 --add-host list postgresSQL:192.168.2.222
+# --add-host db-postgresSQL:192.168.2.231 \
 # --network 
+# --network=host \
+# --cpus 0.5 \
 # --ip 192.168.2.232
 # --link-local-ip
 # --mount /MNT/REDMINE_FILES /usr/src/redmine/files
