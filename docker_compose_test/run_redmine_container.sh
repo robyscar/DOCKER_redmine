@@ -28,12 +28,13 @@ https://www.redmine.org/projects/redmine/wiki/HowTos
 
 #   -v /my/own/datadir:/usr/src/redmine/files
 
+
+
 useradd -m -U redmine
 
 docker network create redmine-network
 
 cls && docker volume rm POSTGRES_CONFIG && docker volume rm POSTGRES_DATA && docker volume rm POSTGRES_LOG
-
 docker volume create POSTGRES_CONFIG && docker volume create POSTGRES_DATA && docker volume create POSTGRES_LOG
 
 
@@ -121,3 +122,12 @@ redmine:latest
 # --link-local-ip
 # --mount /MNT/REDMINE_FILES /usr/src/redmine/files
 type=bind,target=/MNT/REDMINE_FILES,source=/usr/src/redmine/files
+
+
+
+docker run -it \
+--restart=unless-stopped \
+--name redmine-ruby-slim \
+--hostname redmine-ruby-slim \
+--network=host \
+ruby:slim

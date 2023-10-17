@@ -1,7 +1,27 @@
+### https://hub.docker.com/_/debian
+###	https://hub.docker.com/layers/library/debian/stable-slim/images/sha256-f1ffed2840b6ba57cd13f0ff5e21ce063ad1b7fdd7a32b9521372a02ca91c1b1?context=explore
+### https://hub.docker.com/layers/library/debian/bookworm-slim/images/sha256-abbf1e0df2d9631707a41780bd9d332523d10cbb14560122536210298b77f09d?context=explore
+
+
+FROM debian:bookworm-slim
+###	ADD file:ceffa8e71bafc0190f915774b9696a0b6cb6262d1df5f64028b570ca4055ba83	###	linux/amd64		27.8 MB
+###	ADD file:b828ab72afebbd710b7ff56c884909e88d783d54b13ece60bf7e37ade80f29fd	###	linux/arm/v7	23.6 MB		
+###	ADD file:14fe2ebe82b665c6115826bdff47b53c46b973bd8d00ce21c2b8a1bffae58b4f	###	linux/arm64/v8		
+
+CMD ["bash"]
+
+
 ### https://www.atlantic.net/dedicated-server-hosting/how-to-install-redmine-4-2-on-debian-10/
 ### How to Install Redmine 4.2 on Debian 10
 
-FROM ruby:slim
+###	https://hub.docker.com/_/redmine/tags
+
+FROM ruby:3.2.2-slim-bookworm
+
+# ADD file:d29ec8ef9c05b79202b1ebc60a951e2fc11043112aa3a6b081b850241fc1358c	###	linux/amd64				74.23 MB
+# ADD file:ab1eda92c1b279347a723af7f38d9b13c70c48bd81ce5442c13a237467c7b453	###	linux/arm/v7			63.51 MB
+# ADD file:4e87a99f6ed51f4803830c734013211d8efadd1c3fff91f910e770f3616d9ba8	###	linux/arm64/v8		73.11 MB
+
 
 # explicitly set uid/gid to guarantee that it won't change in the future
 # the values 999:999 are identical to the current user/group id assigned
@@ -86,9 +106,15 @@ RUN set -eux; \
 	apt-get install -y --no-install-recommends gosu; \
 	gosu redmine bundle config --local; \ 
 	gem install puma;\
+	gem update --system 3.4.20;\
   ### without 'development test'; \
 # https://github.com/redmine/redmine/commit/23dc108e70a0794f444803ac827a690085dcd557
 # ("gem puma" already exists in the Gemfile, but under "group :test" and we want it all the time)
+
+
+#### ------ RESTART FROM HERE 
+
+
 	puma="$(grep -E "^[[:space:]]*gem [:'\"]puma['\",[:space:]].*\$" Gemfile)"; \
 	{ echo; echo "$puma"; } | sed -re 's/^[[:space:]]+//' >> Gemfile; \
 # fill up "database.yml" with bogus entries so the redmine Gemfile will pre-install all database adapter dependencies

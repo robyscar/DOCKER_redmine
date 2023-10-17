@@ -1,0 +1,99 @@
+docker exec -it remine-test bash
+https://www.redmine.org/projects/redmine/wiki/RedmineInstall#Supported-database-back-ends
+
+
+https://www.redmine.org/projects/redmine/wiki/howto_install_redmine_on_ubuntu_step_by_step
+
+apt-get install apache2 libapache2-mod-passenger
+apt-get install mysql-server mysql-client 
+
+
+apt-get install 
+
+
+
+apt-get install --simulate --show-progress --no-install-recommends postgresql-15 postgresql-15-debversion postgresql-all postgresql-client-15 postgresql-client-common postgresql-15-plsh
+
+--install-suggests
+--yes
+
+
+apt-get install --simulate --show-progress --no-install-recommends redmine redmine-pgsql redmine-sqlite redmine-plugin-custom-css redmine-plugin-redhopper
+
+python3-redminelib - Python library for the Redmine RESTful API (Python 3)
+redmine - flexible project management web application
+redmine-mysql - metapackage providing MySQL dependencies for Redmine
+redmine-pgsql - metapackage providing PostgreSQL dependencies for Redmine
+redmine-sqlite - metapackage providing sqlite dependencies for Redmine
+redmine-plugin-custom-css - Redmine plugin to add custom CSS editable through web interface
+redmine-plugin-redhopper - Kanban boards for Redmine, inspired by Jira Agile
+
+
+
+cl-postgres - Low-level client library for PosgreSQL
+postgresql-15-extra-window-functions - Extra Window Functions for PostgreSQL
+postgresql-15-first-last-agg - PostgreSQL extension providing first and last aggregate functions
+postgresql-15-mimeo - specialized, per-table replication between PostgreSQL instances
+pgagent - job scheduling engine for PostgreSQ
+ruby-dataobjects-postgres - PostgreSQL adapter for ruby-dataobjects
+postgresql-15-repmgr - replication manager for PostgreSQL 15
+odbc-postgresql - ODBC driver for PostgreSQL
+
+postgresql-15-debversion - Debian version number type for PostgreSQL
+postgresql-15 - The World's Most Advanced Open Source Relational Database
+postgresql-all - metapackage depending on all PostgreSQL server packages
+
+postgresql - object-relational SQL database (supported version)
+postgresql-client - front-end programs for PostgreSQL (supported version)
+postgresql-client-common - manager for multiple PostgreSQL client versions
+postgresql-common - PostgreSQL database-cluster manager
+postgresql-client-15 - front-end programs for PostgreSQL 15
+
+postgresql-contrib - additional facilities for PostgreSQL (supported version)
+postgresql-doc - documentation for the PostgreSQL database management system
+postgresql-server-dev-all - extension build tool for multiple PostgreSQL versions
+postgresql-filedump - Dump PostgreSQL files in human-readable form
+postgresql-15-mysql-fdw - Postgres 15 Foreign Data Wrapper for MySQL
+postgresql-15-numeral - numeral datatypes for PostgreSQL
+postgresql-15-periods - PERIODs and SYSTEM VERSIONING for PostgreSQL
+postgresql-15-pgmp - arbitrary precision integers and rationals for PostgreSQL 15
+postgresql-15-plproxy - database partitioning system for PostgreSQL 15
+postgresql-15-plsh - PL/sh procedural language for PostgreSQL 15
+postgresql-15-prioritize - Get and set the nice priorities of PostgreSQL backends
+postgresql-15-set-user - PostgreSQL privilege escalation with enhanced logging and control
+postgresql-15-unit - SI Units for PostgreSQL
+postgresql-15-powa - PostgreSQL Workload Analyzer -- PostgreSQL 15 extension
+postgresql-15-prefix - Prefix Range module for PostgreSQL
+postgresql-15-preprepare - pre prepare your PostgreSQL statements server side
+
+
+
+postgresql-doc-15 - documentation for the PostgreSQL database management system
+postgresql-plperl-15 - PL/Perl procedural language for PostgreSQL 15
+postgresql-plpython3-15 - PL/Python 3 procedural language for PostgreSQL 15
+postgresql-pltcl-15 - PL/Tcl procedural language for PostgreSQL 15
+postgresql-server-dev-15 - development files for PostgreSQL 15 server-side programming
+postgresql-autodoc - Utility to create a PostgreSQL database schema overview in HTML, DOT and XML
+postgresql-doc - documentation for the PostgreSQL database management system
+postgresql-server-dev-all - extension build tool for multiple PostgreSQL versions
+postgresql-15-debversion - Debian version number type for PostgreSQL
+postgresql-filedump - Dump PostgreSQL files in human-readable form
+postgresql-15-hll - HyperLogLog extension for PostgreSQL
+postgresql-15-mysql-fdw - Postgres 15 Foreign Data Wrapper for MySQL
+postgresql-15-numeral - numeral datatypes for PostgreSQL
+libpostgresql-ocaml - OCaml bindings to PostgreSQL's libpq (runtime)
+libpostgresql-ocaml-dev - OCaml bindings to PostgreSQL's libpq
+postgresql-15-periods - PERIODs and SYSTEM VERSIONING for PostgreSQL
+postgresql-15-pgmp - arbitrary precision integers and rationals for PostgreSQL 15
+postgresql-15-pllua - Lua procedural language for PostgreSQL 15
+postgresql-15-plproxy - database partitioning system for PostgreSQL 15
+postgresql-15-plsh - PL/sh procedural language for PostgreSQL 15
+postgresql-15-prioritize - Get and set the nice priorities of PostgreSQL backends
+postgresql-15-q3c - PostgreSQL 15 extension used for indexing the sky
+postgresql-15-rum - PostgreSQL RUM access method
+postgresql-15-semver - Semantic version number type for PostgreSQL
+postgresql-15-set-user - PostgreSQL privilege escalation with enhanced logging and control
+postgresql-15-unit - SI Units for PostgreSQL
+postgresql-15-powa - PostgreSQL Workload Analyzer -- PostgreSQL 15 extension
+postgresql-15-prefix - Prefix Range module for PostgreSQL
+postgresql-15-preprepare - pre prepare your PostgreSQL statements server side
