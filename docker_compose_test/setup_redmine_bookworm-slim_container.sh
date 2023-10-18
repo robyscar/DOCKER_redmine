@@ -25,7 +25,7 @@ docker network inspect redmine-postgres | grep Subnet
 
 docker run -itd \
 --restart=unless-stopped \
---name redmine-postgres-bookworm-slim \
+--name redmine-postgres-bookworm-slim-test \
 --hostname redmine-postgres \
 --network=redmine-postgres \
 -p 22:22 \
@@ -37,7 +37,8 @@ docker run -itd \
 --cpu-quota 60000 \
 debian:bookworm-slim
 
-docker exec -it redmine-postgres-bookworm-slim
+docker exec -it redmine-postgres-bookworm-slim-test sh -c bash
+
 
 ### --env-file ./test_postgresql.env \
 ### -v POSTGRES_DATA:/var/lib/postgresql/data \

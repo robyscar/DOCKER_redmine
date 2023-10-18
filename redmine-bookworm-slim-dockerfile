@@ -1,20 +1,235 @@
+### docker restart redmine-postgres-bookworm-slim-test
+### docker exec -it redmine-postgres-bookworm-slim-test sh -c bash
+
 FROM bookworm-slim:latest
 
+ENV GOSU_VERSION 1.16
+ENV LANG en_US.utf8
+ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
+ENV PG_MAJOR 16
+ENV PG_VERSION 16.0-1.pgdg110+1
 
 ### --- POSTGRESQL section ------------------------------- {begin}
+### echo "alias cls='clear'" >> $HOME/.bashrc
+###    alias cls='clear' && \
+
+### clear; export GOSU_VERSION=1.16; echo $GOSU_VERSION
+### clear; export LANG=en_US.utf8; echo $LANG
+### clear; export PATH=$PATH:/usr/lib/postgresql/$PG_MAJOR/bin; echo $PATH
+### clear; export PG_MAJOR=16; echo $PG_MAJOR
+### clear; export PG_VERSION=16.0-1.pgdg110+1; echo $PG_VERSION
+
 RUN set -eux; \
+    alias cls='clear'; \
     groupadd -r postgres --gid=999; \
-    # https://salsa.debian.org/postgresql/postgresql-common/blob/997d842ee744687d99a2b2d95c1083a2615c79e8/debian/postgresql-common.postinst#L32-35
     useradd -r -g postgres --uid=999 --home-dir=/var/lib/postgresql --shell=/bin/bash postgres; \
-    # also create the postgres user's home directory with appropriate permissions
-    # see https://github.com/docker-library/postgres/issues/274
     mkdir -p /var/lib/postgresql; \
     chown -R postgres:postgres /var/lib/postgresql
+
+RUN set -ex; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+    gnupg gpgv debian-archive-keyring \
+    ; \
+    rm -rf /var/lib/apt/lists/* 
+
+### export savedAptMark="$(apt-mark showmanual)"; clear; echo $savedAptMark 
+
+
+RUN clear; \
+    set -eux; \
+    savedAptMark="$(apt-mark showmanual)"; \
+    clear; echo $savedAptMark; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+    ca-certificates wget nano less mc iproute2 fping git; \
+    rm -rf /var/lib/apt/lists/*; \
+###     
+    clear; \
+    dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
+###    
+    echo $dpkgArch; \
+    echo $GOSU_VERSION; \
+
+###    
+    wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
+    wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
+###    
+    clear; \ 
+    export GNUPGHOME="$(mktemp -d)"; \
+    echo $GNUPGHOME; \
+###
+    clear; \
+    gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+    gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
+    gpgconf --kill all; \
+###
+    clear; echo $GNUPGHOME; echo $savedAptMark; \
+###    
+    ### savedAptMark="$(apt-mark showmanual)"; \
+###
+    rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
+    apt-mark auto '.*' > /dev/null; \
+    [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; \
+    clear; echo $savedAptMark; \
+    chmod +x /usr/local/bin/gosu; \
+    gosu --version; \
+    gosu nobody true
+
+###     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+
+
+### clear; apt list --installed | less
+
+### clear; export LANG=en_US.utf8; echo $LANG
+
+RUN clear; set -eux; \
+    if [ -f /etc/dpkg/dpkg.cfg.d/docker ]; then \
+    grep -q '/usr/share/locale' /etc/dpkg/dpkg.cfg.d/docker; \
+    sed -ri '/\/usr\/share\/locale/d' /etc/dpkg/dpkg.cfg.d/docker; \
+    ! grep -q '/usr/share/locale' /etc/dpkg/dpkg.cfg.d/docker; \
+    fi; \
+    apt-get update; apt-get install -y --no-install-recommends locales; rm -rf /var/lib/apt/lists/*; \
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+RUN clear; set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+    libnss-wrapper \
+    xz-utils \
+    zstd \
+    ; \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /docker-entrypoint-initdb.d
+
+### 
+
+RUN clear; set -ex; \
+    key='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8'; \
+    clear; export GNUPGHOME="$(mktemp -d)"; echo $GNUPGHOME; \
+    mkdir -p /usr/local/share/keyrings/; \
+    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+    gpg --batch --export --armor "$key" > /usr/local/share/keyrings/postgres.gpg.asc; \
+    gpgconf --kill all; \
+    rm -rf "$GNUPGHOME"
+
+
+### clear; export PG_MAJOR=16; export PATH=$PATH:/usr/lib/postgresql/$PG_MAJOR/bin; export PG_VERSION=16.0-1.pgdg110+1; clear; echo $PG_MAJOR; echo $PATH; echo $PG_VERSION
+
+### clear; export PYTHONDONTWRITEBYTECODE=1; echo $PYTHONDONTWRITEBYTECODE
+### clear; export dpkgArch="$(dpkg --print-architecture)"; echo $dpkgArch
+### clear; export aptRepo="[ signed-by=/usr/local/share/keyrings/postgres.gpg.asc ] http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main $PG_MAJOR"; echo $aptRepo
+
+
+RUN set -ex; clear; \
+    export PYTHONDONTWRITEBYTECODE=1; \
+    echo $PYTHONDONTWRITEBYTECODE; \
+    dpkgArch="$(dpkg --print-architecture)"; \
+    aptRepo="[ signed-by=/usr/local/share/keyrings/postgres.gpg.asc ] http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main $PG_MAJOR"; \ 
+    clear; echo $dpkgArch; echo $aptRepo; \
+###    case "$dpkgArch" in \
+###    amd64 | arm64 | ppc64el | s390x) \
+    echo "deb $aptRepo" > /etc/apt/sources.list.d/pgdg.list; \
+    apt-get update; \
+###    ;; *) \
+    echo "deb-src $aptRepo" > /etc/apt/sources.list.d/pgdg.list; \
+    \
+    savedAptMark="$(apt-mark showmanual)"; \
+    clear; echo $savedAptMark; \
+    \
+    tempDir="$(mktemp -d)"; \
+    cd "$tempDir"; \
+    \
+    clear; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends dpkg-dev; \
+    \
+    clear; \
+    echo "deb [ trusted=yes ] file://$tempDir ./" > /etc/apt/sources.list.d/temp.list; \
+    _update_repo() { \
+    dpkg-scanpackages . > Packages; \
+    apt-get -o Acquire::GzipIndexes=false update; \
+    }; \
+    _update_repo; \
+    ### _update_repo >>>>
+    ###     N: Download is performed unsandboxed as root as file '/tmp/tmp.dWrmFbsxaO/./InRelease' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)    
+    \
+###     apt-get purge -y --auto-remove; \
+### rm -rf "$tempDir" /etc/apt/sources.list.d/temp.list
+
+    clear; nproc="$(nproc)"; \
+    export DEB_BUILD_OPTIONS="nocheck parallel=$nproc"; \
+    echo $nproc; echo $DEB_BUILD_OPTIONS; \
+\
+    clear; apt-get install -y --no-install-recommends postgresql-common dpkg-dev; \
+\
+    clear; apt-get build-dep -y postgresql-common pgdg-keyring; \
+\    
+    clear; apt-get source --compile postgresql-common pgdg-keyring; \
+    clear; _update_repo; \
+\
+    clear; echo $PG_MAJOR; echo $PG_VERSION;
+
+\ ###   ********************** until here error on next rows
+
+    apt-get update; \
+    apt-get build-dep -y --fix-missing --fix-broken "postgresql-$PG_MAJOR=$PG_VERSION"; \
+\    
+    apt-get source --compile "postgresql-$PG_MAJOR=$PG_VERSION"; \
+\ 
+    apt-mark showmanual | xargs apt-mark auto > /dev/null; \
+\
+    clear; echo $savedAptMark;
+    apt-mark manual $savedAptMark; \
+    ls -lAFh; \
+    _update_repo; \
+    grep '^Package: ' Packages; \
+    cd /; \
+    ;; \
+    esac; \
+    apt-get install -y --no-install-recommends postgresql-common; \
+    sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf; \
+    apt-get install -y --no-install-recommends \
+    "postgresql-$PG_MAJOR=$PG_VERSION"; \
+    rm -rf /var/lib/apt/lists/*; \
+    \
+    if [ -n "$tempDir" ]; then \
+    apt-get purge -y --auto-remove; \
+    rm -rf "$tempDir" /etc/apt/sources.list.d/temp.list; \
+    fi; \
+    \
+    find /usr -name '*.pyc' -type f -exec bash -c 'for pyc; do dpkg -S "$pyc" &> /dev/null || rm -vf "$pyc"; done' -- '{}' +; \
+    \
+    postgres --version
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RUN clear; apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+
+
+###     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+
 ### --- POSTGRESQL section ------------------------------- {end}
 
 
 ### --- REDMINE section ------------------------------- {begin}
-RUN groupadd -r -g 999 redmine && useradd -r -g redmine -u 999 redmine && 
+RUN groupadd -r -g 666 redmine && useradd -r -g redmine -u 666 redmine && 
 
 
 ### --- REDMINE section ------------------------------- {end}
