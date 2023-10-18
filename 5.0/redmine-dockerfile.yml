@@ -52,9 +52,9 @@ ENV RAILS_ENV production
 WORKDIR /usr/src/redmine
 ENV HOME /home/redmine
 
-#	export RAILS_ENV='production' 
-#	export WORKDIR='/usr/src/redmine'
-#	export HOME='/home/redmine'
+export RAILS_ENV='production' 
+export WORKDIR='/usr/src/redmine'
+export HOME='/home/redmine'
 
 # https://github.com/docker-library/redmine/issues/138#issuecomment-438834176
 # (bundler needs this for running as an arbitrary user)
