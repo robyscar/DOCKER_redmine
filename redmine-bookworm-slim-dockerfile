@@ -161,18 +161,35 @@ RUN set -ex; clear; \
     clear; nproc="$(nproc)"; \
     export DEB_BUILD_OPTIONS="nocheck parallel=$nproc"; \
     echo $nproc; echo $DEB_BUILD_OPTIONS; \
+
+    clear; export PG_MAJOR=16; \ 
+    export PG_VERSION=16.0-1.pgdg110+1; \
+    echo $PG_VERSION; echo $PG_MAJOR; \
+
 \
     clear; apt-get install -y --no-install-recommends postgresql-common dpkg-dev; \
 \
-    clear; apt-get build-dep -y postgresql-common pgdg-keyring; \
+    clear; \
+    apt-get build-dep -y \
+    postgresql-common pgdg-keyring; \
 \    
-    clear; apt-get source --compile postgresql-common pgdg-keyring; \
+    clear; \
+    apt-get source --compile \
+    postgresql-common pgdg-keyring; \
+\
     clear; _update_repo; \
 \
-    clear; echo $PG_MAJOR; echo $PG_VERSION;
-
-\ ###   ********************** until here error on next rows
-
+    clear; echo $PG_MAJOR; echo $PG_VERSION; \
+\
+###   ********************** until here error on next rows
+### TO DO:
+### The following packages have unmet dependencies:
+###     builddeps:postgresql-16 : 
+###     Depends: postgresql-common (>= 252~)
+###     but248 is to be installed
+###     E: Unable to correct problems, 
+###     you have held broken packages.
+\
     apt-get update; \
     apt-get build-dep -y --fix-missing --fix-broken "postgresql-$PG_MAJOR=$PG_VERSION"; \
 \    
