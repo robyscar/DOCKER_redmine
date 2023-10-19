@@ -3,6 +3,7 @@
 ### https://hub.docker.com/layers/library/debian/bookworm-slim/images/sha256-abbf1e0df2d9631707a41780bd9d332523d10cbb14560122536210298b77f09d?context=explore
 
 
+
 FROM debian:bookworm-slim
 ###	ADD file:ceffa8e71bafc0190f915774b9696a0b6cb6262d1df5f64028b570ca4055ba83	###	linux/amd64		27.8 MB
 ###	ADD file:b828ab72afebbd710b7ff56c884909e88d783d54b13ece60bf7e37ade80f29fd	###	linux/arm/v7	23.6 MB		
