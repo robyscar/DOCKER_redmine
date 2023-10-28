@@ -19,6 +19,10 @@ ENV PG_VERSION 16.0-1.pgdg110+1
 ### clear; export PG_MAJOR=16; echo $PG_MAJOR
 ### clear; export PG_VERSION=16.0-1.pgdg110+1; echo $PG_VERSION
 
+RUN docker network inspect default --format "{{.IPAM.Config.Subnet}}" | tee /etc/environment
+
+CMD ["echo", "$DOCKER_SUBNET"]
+
 RUN set -eux; \
     alias cls='clear'; \
     groupadd -r postgres --gid=999; \
@@ -42,7 +46,7 @@ RUN clear; \
     clear; echo $savedAptMark; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-    ca-certificates wget nano less mc iproute2 fping git; \
+    ca-certificates wget nano less mc iproute2 fping jq git; \
     rm -rf /var/lib/apt/lists/*; \
 ###     
     clear; \
